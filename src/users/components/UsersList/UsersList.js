@@ -1,4 +1,4 @@
-import styles from './UsersList.module.css';
+import './UsersList.css';
 
 import UserItem from '../UserItem/UserItem';
 import Card from '../../../common/components/UIElements/Card/Card';
@@ -9,8 +9,8 @@ const UsersList = ({
 }) => {
     if (items.length === 0) {
         return (
-            <div className={styles.center}>
-                <Card className={styles.center}>
+            <div className='center'>
+                <Card className='center'>
                     <h2>No users found.</h2>
                 </Card>
             </div>

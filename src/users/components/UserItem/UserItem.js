@@ -1,4 +1,4 @@
-import style from './UserItem.module.css';
+import './UserItem.css';
 import { Link } from 'react-router-dom';
 
 import Avatar from '../../../common/components/UIElements/Avatar/Avatar';
@@ -8,13 +8,13 @@ const UserItem = ({
   user
 }) => {
   return (
-    <li className={style['user-item']}>
-      <Card className={style['user-item__content']}>
+    <li className='user-item'>
+      <Card className='user-item__content'>
         <Link to={`/${user.id}/places`}>
-          <div className={style['user-item__image']}>
+          <div className='user-item__image'>
             <Avatar image={user.img} alt={user.name} />
           </div>
-          <div className={style['user-item__info']}>
+          <div className='user-item__info'>
             <h2>{user.name}</h2>
             <h3>
               {user.placeCount}
