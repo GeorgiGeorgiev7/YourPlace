@@ -1,5 +1,10 @@
+import UsersList from "../components/UsersList/UsersList";
+
+
 const Users = () => {
-    return <h2>Works</h2>;
+    const USERS = [];
+
+    return <UsersList items={USERS} />;
 };
 
 export default Users;
