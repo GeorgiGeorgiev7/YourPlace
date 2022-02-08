@@ -2,6 +2,7 @@ import { Navigate } from 'react-router-dom';
 import { Routes, Route } from 'react-router-dom';
 
 import Users from './users/pages/Users';
+import Auth from './users/pages/Auth/Auth';
 import MainNav from './common/components/Navigation/MainNav/MainNav';
 import NewPlace from './places/pages/NewPlace/NewPlace';
 import UpdatePlace from './places/pages/UpdatePlace/UpdatePlace';
@@ -30,6 +31,10 @@ function App() {
           <Route
             path="/places/:pid"
             element={<UpdatePlace />}
+          />
+          <Route
+            path="/auth"
+            element={<Auth />}
           />
           <Route
             path="/pageNotFound"
