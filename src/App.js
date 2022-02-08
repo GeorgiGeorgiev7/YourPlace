@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 
 import Users from './users/pages/Users';
 import MainNav from './common/components/Navigation/MainNav/MainNav';

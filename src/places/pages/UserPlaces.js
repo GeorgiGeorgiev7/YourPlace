@@ -46,7 +46,7 @@ const PLACES = [
 const UserPlaces = () => {
     const params = useParams();
     const userPlaces = PLACES.filter(
-        place => place.creatorId == params.uid
+        place => place.creatorId === params.uid
     );
 
     return <PlaceList places={userPlaces} />;
