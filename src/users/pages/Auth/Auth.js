@@ -1,6 +1,7 @@
 import './Auth.css';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+import AuthContext from '../../../common/context/auth-context';
 
 import Card from '../../../common/components/UIElements/Card/Card';
 import Input from '../../../common/components/FormElements/Input/Input';
@@ -9,9 +10,13 @@ import Button from '../../../common/components/FormElements/Button/Button';
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../../common/util/validators';
 
 import { useForm } from '../../../common/hooks/form-hook';
+import { useNavigate } from 'react-router-dom';
 
 
 const Auth = () => {
+    const navigate = useNavigate();
+
+    const { isLoggedIn, login, logout } = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
     const [formState, inputHandler, setFormData] = useForm({
         email: {
@@ -47,6 +52,8 @@ const Auth = () => {
         e.preventDefault();
         console.log(formState.inputs);
         // TODO rest service connection
+        login();
+        navigate('/');
     };
 
 
