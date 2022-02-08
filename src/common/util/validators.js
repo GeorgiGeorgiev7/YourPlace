@@ -21,26 +21,41 @@ export const VALIDATOR_MAX = val => ({ type: VALIDATOR_TYPE_MAX, val: val });
 export const VALIDATOR_EMAIL = () => ({ type: VALIDATOR_TYPE_EMAIL });
 
 export const validate = (value, validators) => {
-  let isValid;
+  let isValid = true;
   for (const validator of validators) {
+    console.log(`${validator.type} == ${VALIDATOR_TYPE_REQUIRE}`)
     if (validator.type === VALIDATOR_TYPE_REQUIRE) {
-      isValid = isValid && value.trim().length > 0;
+      console.log(
+        `${value.trim()} has length: ${value.trim().length}`
+      );
+      console.log(
+        `so value.trim().length > 0 is ${value.trim().length > 0}`
+      );
+      isValid = value.trim().length > 0;
+      console.log(
+        `so isValid is ${value.trim().length > 0}`
+      );
+      console.log(
+        `,but isValid = ${isValid}`
+      );
     }
-    if (validator.type === VALIDATOR_TYPE_MINLENGTH) {
-      isValid = isValid && value.trim().length >= validator.val;
+    else if (validator.type === VALIDATOR_TYPE_MINLENGTH) {
+      isValid = value.trim().length >= validator.val;
     }
-    if (validator.type === VALIDATOR_TYPE_MAXLENGTH) {
-      isValid = isValid && value.trim().length <= validator.val;
+    else if (validator.type === VALIDATOR_TYPE_MAXLENGTH) {
+      isValid = value.trim().length <= validator.val;
     }
-    if (validator.type === VALIDATOR_TYPE_MIN) {
-      isValid = isValid && +value >= validator.val;
+    else if (validator.type === VALIDATOR_TYPE_MIN) {
+      isValid = +value >= validator.val;
     }
-    if (validator.type === VALIDATOR_TYPE_MAX) {
-      isValid = isValid && +value <= validator.val;
+    else if (validator.type === VALIDATOR_TYPE_MAX) {
+      isValid = +value <= validator.val;
     }
-    if (validator.type === VALIDATOR_TYPE_EMAIL) {
-      isValid = isValid && /^\S+@\S+\.\S+$/.test(value);
+    else if (validator.type === VALIDATOR_TYPE_EMAIL) {
+      isValid = /^\S+@\S+\.\S+$/.test(value);
     }
+
+    if (!isValid) break;
   }
   return isValid;
 };
