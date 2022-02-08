@@ -27,7 +27,7 @@ const MainNav = () => {
             {drawerIsOpen &&
                 (
                     <SideDrawer>
-                        <nav className='main-drawer-nav'>
+                        <nav className='main-navigation__drawer-nav'>
                             <NavLinks />
                         </nav>
                     </SideDrawer>
