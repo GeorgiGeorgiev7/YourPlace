@@ -50,6 +50,10 @@ const NewPlace = () => {
             description: {
                 value: '',
                 isValid: false
+            },
+            address: {
+                value: '',
+                isValid: false
             }
         },
         isValid: false
@@ -64,8 +68,14 @@ const NewPlace = () => {
         });
     }, []);
 
+    const submitHandler = e => {
+        e.preventDefault();
+        console.log(formState.inputs);          
+        // TODO: Send it to the rest service
+    };
+
     return (
-        <form className="place-form">
+        <form className="place-form" onSubmit={submitHandler}>
             <Input
                 id='title'
                 element='input'
@@ -81,6 +91,14 @@ const NewPlace = () => {
                 label='Description'
                 validators={[VALIDATOR_MINLENGTH(10)]}
                 errorMessage='Please enter a valid description (at least 10 characters).'
+                onInput={inputHandler}
+            />
+            <Input
+                id='address'
+                element='input'
+                label='Address'
+                validators={[VALIDATOR_REQUIRE()]}
+                errorMessage='Please enter a valid address.'
                 onInput={inputHandler}
             />
             <Button type='submit' disabled={!formState.isValid}>
