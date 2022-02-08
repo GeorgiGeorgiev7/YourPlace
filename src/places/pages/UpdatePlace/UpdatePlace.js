@@ -1,5 +1,6 @@
 import '../PlaceForm.css';
 
+import { useEffect } from 'react';
 import { useParams, Navigate } from "react-router-dom";
 import { useForm } from '../../../common/hooks/form-hook';
 
@@ -53,18 +54,33 @@ const UpdatePlace = () => {
     const params = useParams();
     const placeId = params.pid;
 
-    const place = PLACES.filter(place => place.id === placeId)[0];
-
-    const [formState, inputHandler] = useForm({
+    const [formState, inputHandler, setFormData] = useForm({
         title: {
-            value: place.title,
-            isValid: true,
+            value: '',
+            isValid: false,
         },
         description: {
-            value: place.description,
-            isValid: true
+            value: '',
+            isValid: false
         }
-    }, true);
+    }, false);
+
+    const place = PLACES.filter(place => place.id === placeId)[0];
+
+    useEffect(() => {
+        setFormData({
+            title: {
+                value: place.title,
+                isValid: true,
+            },
+            description: {
+                value: place.description,
+                isValid: true
+            }
+        },
+            true
+        );
+    }, [setFormData, place]);
 
     const submitHandler = e => {
         e.preventDefault();
@@ -74,6 +90,15 @@ const UpdatePlace = () => {
 
     if (!place) {
         return <Navigate to="/pageNotFound" />;
+    }
+
+    if (!formState.inputs.title.value) {
+        // temporary work around
+        return (
+            <div className='center'>
+                <h2>Loading...</h2>
+            </div>
+        );
     }
 
     return (
