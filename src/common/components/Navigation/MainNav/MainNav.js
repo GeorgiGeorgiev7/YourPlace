@@ -19,7 +19,6 @@ const MainNav = () => {
     const closeDrawerHandler = () => {
         setDrawerIsOpen(false);
     };
-    console.log(<Backdrop />);
 
     return (
         <>
