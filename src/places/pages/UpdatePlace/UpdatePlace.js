@@ -68,18 +68,20 @@ const UpdatePlace = () => {
     const place = PLACES.filter(place => place.id === placeId)[0];
 
     useEffect(() => {
-        setFormData({
-            title: {
-                value: place.title,
-                isValid: true,
+        if (place) {
+            setFormData({
+                title: {
+                    value: place.title,
+                    isValid: true,
+                },
+                description: {
+                    value: place.description,
+                    isValid: true
+                }
             },
-            description: {
-                value: place.description,
-                isValid: true
-            }
-        },
-            true
-        );
+                true
+            );
+        }
     }, [setFormData, place]);
 
     const submitHandler = e => {
