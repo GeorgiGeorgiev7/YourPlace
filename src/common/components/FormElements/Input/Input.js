@@ -23,16 +23,18 @@ const inputReducer = (state, action) => {
                 ...state,
                 isFocused: true
             };
+
         default:
             return state;
+            
     }
 };
 
 
 const Input = (props) => {
     const [inputState, dispatch] = useReducer(inputReducer, {
-        value: '',
-        isValid: false,
+        value: props.initialValue || '',
+        isValid: props.initialIsValid || false,
         isFocused: true
     });
 
@@ -40,7 +42,7 @@ const Input = (props) => {
     const { onInput, id } = props;
 
     useEffect(() => {
-        props.onInput(id, value, isValid);
+        onInput(id, value, isValid);
     }, [onInput, id, value, isValid]);
 
     const changeHandler = e => {

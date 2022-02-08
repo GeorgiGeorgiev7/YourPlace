@@ -1,6 +1,7 @@
 import './PlaceList.css';
 
-import Card from '../../../common/components/UIElements/Card/Card';
+import { Navigate } from 'react-router-dom';
+
 import PlaceItem from '../PlaceItem/PlaceItem';
 
 
@@ -8,13 +9,7 @@ const PlaceList = ({
     places
 }) => {
     if (places.length === 0) {
-        return (
-            <div className='place-list center'>
-                <Card>
-                    <h2>No places found.</h2>
-                </Card>
-            </div>
-        );
+        return <Navigate to="/pageNotFound"/>;
     }
 
     return (

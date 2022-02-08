@@ -1,76 +1,31 @@
-import './NewPlace.css';
+import '../PlaceForm.css';
 
-import { useCallback, useReducer } from 'react';
+import { useForm } from '../../../common/hooks/form-hook';
 
 import Input from '../../../common/components/FormElements/Input/Input';
 import Button from '../../../common/components/FormElements/Button/Button';
 import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../../common/util/validators';
 
 
-const formReducer = (state, action) => {
-    switch (action.type) {
-        case 'INPUT_CHANGE':
-            let formIsValid = true;
-
-            for (const inputId in state.inputs) {
-                if (inputId === action.inputId) {
-                    formIsValid = formIsValid && action.isValid;
-                } else {
-                    formIsValid = formIsValid &&
-                        state.inputs[inputId].isValid;
-                }
-            }
-
-            const res = {
-                ...state,
-                inputs: {
-                    ...state.inputs,
-                    [action.inputId]: {
-                        value: action.value,
-                        isValid: action.isValid
-                    }
-                },
-                isValid: formIsValid
-            };
-            return res;
-
-        default:
-            return state;
-    }
-};
-
-
 const NewPlace = () => {
-    const [formState, dispatch] = useReducer(formReducer, {
-        inputs: {
-            title: {
-                value: '',
-                isValid: false
-            },
-            description: {
-                value: '',
-                isValid: false
-            },
-            address: {
-                value: '',
-                isValid: false
-            }
+    const [formState, inputHandler] = useForm({
+        title: {
+            value: '',
+            isValid: false
         },
-        isValid: false
-    });
-
-    const inputHandler = useCallback((id, value, isValid) => {
-        dispatch({
-            type: 'INPUT_CHANGE',
-            value,
-            isValid,
-            inputId: id
-        });
-    }, []);
+        description: {
+            value: '',
+            isValid: false
+        },
+        address: {
+            value: '',
+            isValid: false
+        }
+    }, false);
 
     const submitHandler = e => {
         e.preventDefault();
-        console.log(formState.inputs);          
+        console.log(formState.inputs);
         // TODO: Send it to the rest service
     };
 
