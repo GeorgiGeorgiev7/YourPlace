@@ -1,6 +1,8 @@
 import './PlaceItem.css';
 
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+
+import AuthContext from '../../../common/context/auth-context';
 
 import Card from '../../../common/components/UIElements/Card/Card';
 import Button from '../../../common/components/FormElements/Button/Button';
@@ -11,6 +13,8 @@ import Map from '../../../common/components/UIElements/Map/Map';
 const PlaceItem = ({
     place
 }) => {
+    const { isLoggedIn } = useContext(AuthContext);
+
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
 
@@ -70,8 +74,12 @@ const PlaceItem = ({
                     </div>
                     <div className='place-item__actions'>
                         <Button inverse onClick={showMapHandler}>VIEW ON MAP</Button>
-                        <Button to={`/places/${place.id}`}>EDIT</Button>
-                        <Button danger onClick={showConfirmModalHandler}>DELETE</Button>
+                        {isLoggedIn &&
+                            <>
+                                <Button to={`/places/${place.id}`}>EDIT</Button>
+                                <Button danger onClick={showConfirmModalHandler}>DELETE</Button>
+                            </>
+                        }
                     </div>
                 </Card>
             </li>
