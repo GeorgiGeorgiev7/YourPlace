@@ -5,6 +5,7 @@ import { useState } from 'react';
 import Card from '../../../common/components/UIElements/Card/Card';
 import Button from '../FormElements/Button/Button';
 import Modal from '../../../common/components/UIElements/Modal/Modal';
+import Map from '../../../common/components/UIElements/Map/Map';
 
 
 const PlaceItem = ({
@@ -26,7 +27,7 @@ const PlaceItem = ({
                 footer={<Button onClick={closeMapHandler}>CLOSE</Button>}
             >
                 <div className='map-container'>
-                    <h2>TODO Map</h2>
+                    <Map center={place.coordinates} zoom={16} />
                 </div>
             </Modal>
             <li className='place-item'>

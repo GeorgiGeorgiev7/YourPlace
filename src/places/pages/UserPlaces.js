@@ -7,10 +7,10 @@ const PLACES = [
     {
         id: 'p1',
         title: 'Empire State Building',
-        description: 'One of the most greatest skyscrapers in the world!',
+        description: 'One of the greatest skyscrapers in the world!',
         imageUrl: 'https://images.fineartamerica.com/images-medium-large-5/empire-state-building-at-sunset-sylvain-sonnet.jpg',
         address: '20 W 34th St, New York, NY 10001, United States',
-        location: {
+        coordinates: {
             lat: 40.7484445,
             lng: -73.9878531
         },
@@ -20,26 +20,27 @@ const PLACES = [
     {
         id: 'p2',
         title: 'Empire State Building',
-        description: 'One of the most greatest skyscrapers in the world!',
+        description: 'One of the greatest skyscrapers in the world!',
         imageUrl: 'https://lh5.googleusercontent.com/p/AF1QipOqzJqLshzKnIkL6VlTOaPu6Y2YoEjrGXy79I4E=w408-h271-k-no',
         address: '20 W 34th St, New York, NY 10001, United States',
-        location: {
+        coordinates: {
             lat: 40.7484445,
             lng: -73.9878531
         },
-        creatorId: 'uid1'
+        creatorId: 'uid2'
     },
 
     {
         id: 'p3',
         title: 'Empire State Building',
-        description: 'One of the most greatest skyscrapers in the world!',
+        description: 'One of the greatest skyscrapers in the world!',
         imageUrl: 'https://static.posters.cz/image/1300/posters/henri-silberman-empire-state-building-i12995.jpg',
-        location: {
+        address: '20 W 34th St, New York, NY 10001, United States',
+        coordinates: {
             lat: 40.7484445,
             lng: -73.9878531
         },
-        creatorId: 'uid2'
+        creatorId: 'uid1'
     }
 ];
 
