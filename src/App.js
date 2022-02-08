@@ -2,7 +2,7 @@ import { Routes, Route } from 'react-router-dom';
 
 import Users from './users/pages/Users';
 import MainNav from './common/components/Navigation/MainNav/MainNav';
-import NewPlace from './places/pages/NewPlace';
+import NewPlace from './places/pages/NewPlace/NewPlace';
 import UserPlaces from './places/pages/UserPlaces';
 import PageNotFound from './common/pages/PageNotFound/PageNotFound';
 

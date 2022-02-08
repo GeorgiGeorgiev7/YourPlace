@@ -3,7 +3,7 @@ import './PlaceItem.css';
 import { useState } from 'react';
 
 import Card from '../../../common/components/UIElements/Card/Card';
-import Button from '../FormElements/Button/Button';
+import Button from '../../../common/components/FormElements/Button/Button'
 import Modal from '../../../common/components/UIElements/Modal/Modal';
 import Map from '../../../common/components/UIElements/Map/Map';
 
