@@ -1,6 +1,6 @@
 import './Input.css';
 
-import { useReducer } from 'react';
+import { useReducer, useEffect } from 'react';
 
 import { validate } from '../../../util/validators';
 
@@ -35,6 +35,13 @@ const Input = (props) => {
         isValid: false,
         isFocused: true
     });
+
+    const { value, isValid } = inputState;
+    const { onInput, id } = props;
+
+    useEffect(() => {
+        props.onInput(id, value, isValid);
+    }, [onInput, id, value, isValid]);
 
     const changeHandler = e => {
         dispatch({
@@ -79,7 +86,7 @@ const Input = (props) => {
     return (
         <div className={
             `form-control 
-            ${!inputState.isValid && !inputState.isFocused && 'form-control--invalid'}`
+${!inputState.isValid && !inputState.isFocused && 'form-control--invalid'}`
         }>
             <label htmlFor={props.id}>{props.label}</label>
             {element}
