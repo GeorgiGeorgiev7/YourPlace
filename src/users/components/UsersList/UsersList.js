@@ -7,6 +7,7 @@ import Card from '../../../common/components/UIElements/Card/Card';
 const UsersList = ({
     items
 }) => {
+    console.log(items);
     if (items.length === 0) {
         return (
             <div className='center'>

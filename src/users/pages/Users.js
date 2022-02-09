@@ -1,17 +1,53 @@
+import { useState, useEffect } from 'react';
+
 import UsersList from "../components/UsersList/UsersList";
+
+import ErrorModal from "../../common/components/UIElements/ErrorModal/ErrorModal";
+import LoadingSpinner from "../../common/components/UIElements/LoadingSpinner/LoadingSpinner";
 
 
 const Users = () => {
-    const USERS = [
-        {
-            id: 'uid1',
-            name: 'Gogo',
-            imageUrl: 'https://scontent-otp1-1.xx.fbcdn.net/v/t39.30808-6/240863747_2732935983595447_1828249937804235462_n.jpg?_nc_cat=110&ccb=1-5&_nc_sid=09cbfe&_nc_ohc=GPLs_w3mp38AX933buS&_nc_ht=scontent-otp1-1.xx&oh=00_AT9piO08pQGs52SUPXSScoBiuhFtXkW--S4v27ZQ2nTcJw&oe=62076372',
-            placeCount: 5
-        }
-    ];
+    const [isLoading, setIsLoading] = useState(false);
+    const [error, setError] = useState();
+    const [users, setUsers] = useState();
 
-    return <UsersList items={USERS} />;
+    useEffect(() => {
+        const sendReq = async () => {
+            setIsLoading(true);
+            try {
+                const response = await fetch('http://localhost:5000/api/users');
+                const data = await response.json();
+
+                if (!response.ok) {
+                    throw data;
+                }
+
+                setIsLoading(false);
+                setUsers(data.users);
+            } catch (err) {
+                setIsLoading(false);
+                setError(err.message);
+            }
+        };
+
+        sendReq();
+    }, []);
+
+    const errorHandler = () => {
+        setError(null);
+    };
+
+    return (
+        <>
+            <ErrorModal error={error} onClear={errorHandler} />
+            {isLoading && (
+                <div className='center'>
+                    <LoadingSpinner />
+                </div>
+            )}
+            {!isLoading && users && <UsersList items={users} />}
+        </>
+    );
 };
 
 export default Users;

@@ -59,9 +59,9 @@ const Auth = () => {
     const authSubmitHandler = async e => {
         e.preventDefault();
 
-        if (!isLoginMode) {
-            setIsLoading(true);
+        setIsLoading(true);
 
+        if (!isLoginMode) {
             try {
                 const response = await fetch(
                     'http://localhost:5000/api/users/signup',
@@ -90,10 +90,41 @@ const Auth = () => {
 
             } catch (err) {
                 setIsLoading(false);
-                console.log(err)
                 setError(err.message ||
                     'Something went wrong, please try again.');
             }
+        } else {
+            try {
+                const response = await fetch(
+                    'http://localhost:5000/api/users/login',
+                    {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({
+                            email: formState.inputs.email.value,
+                            password: formState.inputs.password.value
+                        })
+                    }
+                );
+
+                const data = await response.json();
+                if (!response.ok) {
+                    throw data;
+                }
+
+                setIsLoading(false);
+
+                login();
+                navigate('/');
+
+            } catch (err) {
+                setIsLoading(false);
+                setError(err.message ||
+                    'Something went wrong, please try again.');
+            }
+
         }
     };
 
