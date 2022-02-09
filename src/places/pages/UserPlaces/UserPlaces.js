@@ -1,56 +1,40 @@
+import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 
 import PlaceList from "../../components/PlaceList/PlaceList";
 
+import useHttpClient from '../../../common/hooks/http-hook';
 
-const PLACES = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        description: 'One of the greatest skyscrapers in the world!',
-        imageUrl: 'https://images.fineartamerica.com/images-medium-large-5/empire-state-building-at-sunset-sylvain-sonnet.jpg',
-        address: '20 W 34th St, New York, NY 10001, United States',
-        coordinates: {
-            lat: 40.7484445,
-            lng: -73.9878531
-        },
-        creatorId: 'uid1'
-    },
+import ErrorModal from '../../../common/components/UIElements/ErrorModal/ErrorModal';
+import LoadingSpinner from '../../../common/components/UIElements/LoadingSpinner/LoadingSpinner';
 
-    {
-        id: 'p2',
-        title: 'Empire State Building',
-        description: 'One of the greatest skyscrapers in the world!',
-        imageUrl: 'https://lh5.googleusercontent.com/p/AF1QipOqzJqLshzKnIkL6VlTOaPu6Y2YoEjrGXy79I4E=w408-h271-k-no',
-        address: '20 W 34th St, New York, NY 10001, United States',
-        coordinates: {
-            lat: 40.7484445,
-            lng: -73.9878531
-        },
-        creatorId: 'uid2'
-    },
-
-    {
-        id: 'p3',
-        title: 'Empire State Building',
-        description: 'One of the greatest skyscrapers in the world!',
-        imageUrl: 'https://static.posters.cz/image/1300/posters/henri-silberman-empire-state-building-i12995.jpg',
-        address: '20 W 34th St, New York, NY 10001, United States',
-        coordinates: {
-            lat: 40.7484445,
-            lng: -73.9878531
-        },
-        creatorId: 'uid1'
-    }
-];
 
 const UserPlaces = () => {
-    const params = useParams();
-    const userPlaces = PLACES.filter(
-        place => place.creatorId === params.uid
-    );
+    const userId = useParams().uid;
 
-    return <PlaceList places={userPlaces} />;
+    const [places, setPlaces] = useState();
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    useEffect(() => {
+        sendRequest(
+            `http://localhost:5000/api/places/user/${userId}`
+        )
+            .then(data => setPlaces(data.places))
+            .catch(err => { });
+    }, [sendRequest, userId]);
+
+
+    return (
+        <>
+            <ErrorModal error={error} onClear={clearError} />
+            {isLoading && (
+                <div className='center'>
+                    <LoadingSpinner />
+                </div>
+            )}
+            {!isLoading && places && <PlaceList places={places} />}
+        </>
+    );
 };
 
 export default UserPlaces;
