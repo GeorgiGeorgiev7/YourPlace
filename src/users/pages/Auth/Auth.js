@@ -1,6 +1,7 @@
 import './Auth.css';
 
 import { useState, useContext } from 'react';
+import useHttpClient from '../../../common/hooks/http-hook';
 import AuthContext from '../../../common/context/auth-context';
 
 import Card from '../../../common/components/UIElements/Card/Card';
@@ -22,9 +23,7 @@ const Auth = () => {
     const { login } = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
 
-    const [isLoading, setIsLoading] = useState(false);
-    const [error, setError] = useState();
-
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const [formState, inputHandler, setFormData] = useForm({
         email: {
@@ -59,84 +58,53 @@ const Auth = () => {
     const authSubmitHandler = async e => {
         e.preventDefault();
 
-        setIsLoading(true);
-
         if (!isLoginMode) {
             try {
-                const response = await fetch(
+                await sendRequest(
                     'http://localhost:5000/api/users/signup',
+                    'POST',
                     {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            username: formState.inputs.username.value,
-                            email: formState.inputs.email.value,
-                            password: formState.inputs.password.value
-                        })
-                    }
+                        'Content-Type': 'application/json'
+                    },
+                    JSON.stringify({
+                        username: formState.inputs.username.value,
+                        email: formState.inputs.email.value,
+                        password: formState.inputs.password.value
+                    })
+
                 );
-
-                const data = await response.json();
-                if (!response.ok) {
-                    throw data;
-                }
-
-                setIsLoading(false);
-
                 login();
                 navigate('/');
-
             } catch (err) {
-                setIsLoading(false);
-                setError(err.message ||
-                    'Something went wrong, please try again.');
+                // no login()
             }
+
         } else {
             try {
-                const response = await fetch(
+                await sendRequest(
                     'http://localhost:5000/api/users/login',
+                    'POST',
                     {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json'
-                        },
-                        body: JSON.stringify({
-                            email: formState.inputs.email.value,
-                            password: formState.inputs.password.value
-                        })
-                    }
+                        'Content-Type': 'application/json'
+                    },
+                    JSON.stringify({
+                        email: formState.inputs.email.value,
+                        password: formState.inputs.password.value
+                    })
+
                 );
-
-                const data = await response.json();
-                if (!response.ok) {
-                    throw data;
-                }
-
-                setIsLoading(false);
-
                 login();
                 navigate('/');
-
             } catch (err) {
-                setIsLoading(false);
-                setError(err.message ||
-                    'Something went wrong, please try again.');
+                // no signup()
             }
-
-        }
+        };
     };
-
-    const errorHandler = () => {
-        setError(null);
-    };
-
 
     return (
         <>
             {error &&
-                <ErrorModal error={error} onClear={errorHandler} />}
+                <ErrorModal error={error} onClear={clearError} />}
             <Card Card className="authentication">
                 {isLoading && <LoadingSpinner asOverlay />}
                 <h2>Login Required</h2>
