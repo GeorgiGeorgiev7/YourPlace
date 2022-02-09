@@ -3,7 +3,7 @@
 ### An app where users can share places (with images & location) with other users.
 
 - All CRUD (Create, Read,
-Update, Delete) methods
+Update (Patch), Delete) methods
 covered
 - Multiple data models,
 image upload, input
