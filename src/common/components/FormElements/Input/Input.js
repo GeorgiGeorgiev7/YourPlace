@@ -26,7 +26,7 @@ const inputReducer = (state, action) => {
 
         default:
             return state;
-            
+
     }
 };
 
@@ -88,7 +88,7 @@ const Input = (props) => {
     return (
         <div className={
             `form-control 
-${!inputState.isValid && !inputState.isFocused && 'form-control--invalid'}`
+            ${!inputState.isValid && !inputState.isFocused && 'form-control--invalid'}`
         }>
             <label htmlFor={props.id}>{props.label}</label>
             {element}

@@ -1,58 +1,25 @@
-import '../PlaceForm.css';
-
-import { useEffect } from 'react';
-import { useParams, Navigate } from "react-router-dom";
-import { useForm } from '../../../common/hooks/form-hook';
-
-import Input from "../../../common/components/FormElements/Input/Input";
+import { useEffect, useState, useContext } from 'react';
+import { useParams, useNavigate } from "react-router-dom";
 import Button from "../../../common/components/FormElements/Button/Button";
-import { VALIDATOR_REQUIRE, VALIDATOR_MINLENGTH } from "../../../common/util/validators";
+import Input from "../../../common/components/FormElements/Input/Input";
+import Card from '../../../common/components/UIElements/Card/Card';
+import ErrorModal from '../../../common/components/UIElements/ErrorModal/ErrorModal';
+import LoadingSpinner from '../../../common/components/UIElements/LoadingSpinner/LoadingSpinner';
+import { useForm } from '../../../common/hooks/form-hook';
+import useHttpClient from '../../../common/hooks/http-hook';
+import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from "../../../common/util/validators";
+import '../PlaceForm.css';
+import AuthContext from '../../../common/context/auth-context';
 
-
-const PLACES = [
-    {
-        id: 'p1',
-        title: 'Empire State Building',
-        description: 'One of the greatest skyscrapers in the world!',
-        imageUrl: 'https://images.fineartamerica.com/images-medium-large-5/empire-state-building-at-sunset-sylvain-sonnet.jpg',
-        address: '20 W 34th St, New York, NY 10001, United States',
-        coordinates: {
-            lat: 40.7484445,
-            lng: -73.9878531
-        },
-        creatorId: 'uid1'
-    },
-
-    {
-        id: 'p2',
-        title: 'Empire State Building',
-        description: 'One of the greatest skyscrapers in the world!',
-        imageUrl: 'https://lh5.googleusercontent.com/p/AF1QipOqzJqLshzKnIkL6VlTOaPu6Y2YoEjrGXy79I4E=w408-h271-k-no',
-        address: '20 W 34th St, New York, NY 10001, United States',
-        coordinates: {
-            lat: 40.7484445,
-            lng: -73.9878531
-        },
-        creatorId: 'uid2'
-    },
-
-    {
-        id: 'p3',
-        title: 'Empire State Building',
-        description: 'One of the greatest skyscrapers in the world!',
-        imageUrl: 'https://static.posters.cz/image/1300/posters/henri-silberman-empire-state-building-i12995.jpg',
-        address: '20 W 34th St, New York, NY 10001, United States',
-        coordinates: {
-            lat: 40.7484445,
-            lng: -73.9878531
-        },
-        creatorId: 'uid1'
-    }
-];
 
 const UpdatePlace = () => {
-    const params = useParams();
-    const placeId = params.pid;
+    const navigate = useNavigate();
+    const { userId } = useContext(AuthContext);
+    const placeId = useParams().pid;
+
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
+
+    const [loadedPlace, setLoadedPlace] = useState();
 
     const [formState, inputHandler, setFormData] = useForm({
         title: {
@@ -65,71 +32,95 @@ const UpdatePlace = () => {
         }
     }, false);
 
-    const place = PLACES.filter(place => place.id === placeId)[0];
-
     useEffect(() => {
-        if (place) {
-            setFormData({
-                title: {
-                    value: place.title,
-                    isValid: true,
+        sendRequest(`http://localhost:5000/api/places/${placeId}`)
+            .then(data => {
+                const place = data.place;
+
+                setLoadedPlace(place);
+                setFormData({
+                    title: {
+                        value: place.title,
+                        isValid: true,
+                    },
+                    description: {
+                        value: place.description,
+                        isValid: true
+                    }
                 },
-                description: {
-                    value: place.description,
-                    isValid: true
-                }
-            },
-                true
-            );
-        }
-    }, [setFormData, place]);
+                    true
+                );
+            })
+            .catch(err => { });
+    }, [sendRequest, placeId, setFormData]);
+
 
     const submitHandler = e => {
         e.preventDefault();
-        console.log(formState.inputs);
-        // TODO: Send it to the rest service
+
+        sendRequest(`http://localhost:5000/api/places/${placeId}`,
+            'PATCH',
+            {
+                'Content-Type': 'application/json'
+            },
+            JSON.stringify({
+                title: formState.inputs.title.value,
+                description: formState.inputs.description.value
+            }))
+            .then(data => navigate(`/${userId}/places`))
+            .catch(err => { });
+
     };
 
-    if (!place) {
-        return <Navigate to="/pageNotFound" />;
-    }
-
-    if (!formState.inputs.title.value) {
-        // temporary work around
+    if (isLoading) {
         return (
             <div className='center'>
-                <h2>Loading...</h2>
+                <LoadingSpinner />
+            </div>
+        );
+    }
+
+    if (!loadedPlace) {
+        return (
+            <div className='center'>
+                <Card>
+                    <h2>Could not find place.</h2>
+                </Card>
             </div>
         );
     }
 
     return (
-        <form className="place-form" onSubmit={submitHandler}>
-            <Input
-                id='title'
-                element='input'
-                type='text'
-                label='Title'
-                validators={[VALIDATOR_REQUIRE()]}
-                errorMessage='Please enter a valid title.'
-                onInput={inputHandler}
-                initialValue={formState.inputs.title.value}
-                initialIsValid={formState.inputs.title.isValid}
-            />
-            <Input
-                id='description'
-                element='textarea'
-                label='Description'
-                validators={[VALIDATOR_MINLENGTH(10)]}
-                errorMessage='Please enter a valid description (at least 10 characters).'
-                onInput={inputHandler}
-                initialValue={formState.inputs.description.value}
-                initialIsValid={formState.inputs.description.isValid}
-            />
-            <Button type='submit' disabled={!formState.isValid}>
-                UPDATE PLACE
-            </Button>
-        </form>
+        <>
+            <ErrorModal error={error} onClear={clearError} />
+            {!isLoading && loadedPlace &&
+                <form className="place-form" onSubmit={submitHandler}>
+                    <Input
+                        id='title'
+                        element='input'
+                        type='text'
+                        label='Title'
+                        validators={[VALIDATOR_REQUIRE()]}
+                        errorMessage='Please enter a valid title.'
+                        onInput={inputHandler}
+                        initialValue={loadedPlace.title}
+                        initialIsValid={true}
+                    />
+                    <Input
+                        id='description'
+                        element='textarea'
+                        label='Description'
+                        validators={[VALIDATOR_MINLENGTH(10)]}
+                        errorMessage='Please enter a valid description (at least 10 characters).'
+                        onInput={inputHandler}
+                        initialValue={loadedPlace.description}
+                        initialIsValid={true}
+                    />
+                    <Button type='submit' disabled={!formState.isValid}>
+                        UPDATE PLACE
+                    </Button>
+                </form>}
+        </>
     );
 };
 
