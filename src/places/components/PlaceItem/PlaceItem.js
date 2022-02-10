@@ -1,6 +1,7 @@
 import './PlaceItem.css';
 
 import { useState, useContext } from 'react';
+import useHttpClient from '../../../common/hooks/http-hook';
 
 import AuthContext from '../../../common/context/auth-context';
 
@@ -9,10 +10,15 @@ import Button from '../../../common/components/FormElements/Button/Button';
 import Modal from '../../../common/components/UIElements/Modal/Modal';
 import Map from '../../../common/components/UIElements/Map/Map';
 
+import ErrorModal from '../../../common/components/UIElements/ErrorModal/ErrorModal';
+import LoadingSpinner from '../../../common/components/UIElements/LoadingSpinner/LoadingSpinner';
+
 
 const PlaceItem = ({
-    place
+    place,
+    OnDelete
 }) => {
+    const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const { isLoggedIn } = useContext(AuthContext);
 
     const [showMap, setShowMap] = useState(false);
@@ -22,10 +28,13 @@ const PlaceItem = ({
         setShowConfirmModal(true);
     const closeConfirmModalHandler = () =>
         setShowConfirmModal(false);
+
     const confirmDeleteHandler = () => {
         closeConfirmModalHandler();
-        console.log('Deleting place...');
-        // TODO back end service connection
+
+        sendRequest(`http://localhost:5000/api/places/${place.id}`, 'DELETE')
+            .then(() => OnDelete(place.id))
+            .catch(err => { });
     };
 
     const showMapHandler = () =>
@@ -35,6 +44,7 @@ const PlaceItem = ({
 
     return (
         <>
+            <ErrorModal error={error} onCancel={clearError} />
             <Modal
                 show={showMap}
                 onCancel={closeMapHandler}
@@ -64,6 +74,7 @@ const PlaceItem = ({
             </Modal>
             <li className='place-item'>
                 <Card className='place-item__content'>
+                    {isLoading && <LoadingSpinner asOverlay />}
                     <div className='place-item__image'>
                         <img src={place.image} alt={place.title} />
                     </div>

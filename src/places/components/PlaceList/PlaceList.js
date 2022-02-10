@@ -6,7 +6,8 @@ import Card from '../../../common/components/UIElements/Card/Card';
 
 
 const PlaceList = ({
-    places
+    places,
+    onDelete
 }) => {
     if (places.length === 0) {
         return (
@@ -19,10 +20,15 @@ const PlaceList = ({
         );
     }
 
+
     return (
         <ul className='place-list'>
             {places.map(place =>
-                <PlaceItem key={place.id} place={place} />)}
+                <PlaceItem
+                    key={place.id}
+                    place={place}
+                    onDelete={onDelete}
+                />)}
         </ul>
     );
 };

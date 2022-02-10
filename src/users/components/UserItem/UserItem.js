@@ -7,6 +7,7 @@ import Card from '../../../common/components/UIElements/Card/Card';
 const UserItem = ({
   user
 }) => {
+  console.log(user);
   return (
     <li className='user-item'>
       <Card className='user-item__content'>

@@ -14,12 +14,9 @@ import LoadingSpinner from '../../../common/components/UIElements/LoadingSpinner
 import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../../common/util/validators';
 
 import { useForm } from '../../../common/hooks/form-hook';
-import { useNavigate } from 'react-router-dom';
 
 
 const Auth = () => {
-    const navigate = useNavigate();
-
     const { login } = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -73,8 +70,8 @@ const Auth = () => {
                     })
 
                 );
+                console.log(data);
                 login(data.user.id);
-                navigate('/');
             } catch (err) {
                 // no login()
             }
@@ -94,7 +91,6 @@ const Auth = () => {
 
                 );
                 login(data.user.id);
-                navigate('/');
             } catch (err) {
                 // no signup()
             }
