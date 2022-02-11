@@ -9,6 +9,7 @@ const PlaceList = ({
     places,
     onDelete
 }) => {
+
     if (places.length === 0) {
         return (
             <div className='place-list center'>

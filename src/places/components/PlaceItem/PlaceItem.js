@@ -16,8 +16,9 @@ import LoadingSpinner from '../../../common/components/UIElements/LoadingSpinner
 
 const PlaceItem = ({
     place,
-    OnDelete
+    onDelete
 }) => {
+
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
     const { isLoggedIn } = useContext(AuthContext);
 
@@ -33,8 +34,8 @@ const PlaceItem = ({
         closeConfirmModalHandler();
 
         sendRequest(`http://localhost:5000/api/places/${place.id}`, 'DELETE')
-            .then(() => OnDelete(place.id))
-            .catch(err => { });
+            .then(() => onDelete(place.id))
+            .catch(err => { console.log(err.message); });
     };
 
     const showMapHandler = () =>
