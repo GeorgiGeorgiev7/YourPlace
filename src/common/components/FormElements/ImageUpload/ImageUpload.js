@@ -1,11 +1,15 @@
+import { useRef, useState, useEffect } from 'react';
+import Button from '../Button/Button';
 import './ImageUpload.css';
 
-import { useRef } from 'react';
 
-import Button from '../Button/Button';
 
 
 const ImageUpload = props => {
+    const [file, setFile] = useState();
+    const [previewUrl, setPreviewUrl] = useState();
+    const [isValid, setIsValid] = useState(false);
+
     const filePickerRef = useRef();
 
     const pickImageHandler = () => {
@@ -13,8 +17,31 @@ const ImageUpload = props => {
     };
 
     const pickedImageHandler = ev => {
-        console.log(ev.target);
+        let pickedFile, fileIsValid;
+        if (ev.target.files?.length === 1) {
+            pickedFile = ev.target.files[0];
+            setFile(pickedFile);
+            setIsValid(true);
+            fileIsValid = true;
+        } else {
+            setIsValid(false);
+            fileIsValid = false;
+        }
+
+        props.onInput(props.id, pickedFile, fileIsValid);
     };
+
+    useEffect(() => {
+        if (!file) return;
+
+        const fileReader = new FileReader();
+        fileReader.onload = () => {
+            setPreviewUrl(fileReader.result);
+        };
+
+        fileReader.readAsDataURL(file);
+
+    }, [file]);
 
     return (
         <div className='form-control'>
@@ -28,10 +55,16 @@ const ImageUpload = props => {
             />
             <div className={`image-upload ${props.center && 'center'}`}>
                 <div className='image-upload__preview'>
-                    <img src="" alt="" />
+                    {previewUrl
+                        ? <img src={previewUrl} alt="Preview" />
+                        : <p>Please pick an image</p>
+                    }
                 </div>
-                <Button type="button" onClick={pickImageHandler}>Pick Image</Button>
+                <Button type="button" onClick={pickImageHandler}>
+                    Pick Image
+                </Button>
             </div>
+            {!isValid && <p>{props.errorText}</p>}
         </div>
     );
 };

@@ -16,7 +16,7 @@ const Users = () => {
         sendRequest('http://localhost:5000/api/users')
             .then(data => setUsers(data.users))
             .catch(err => { });
-    }, []);
+    }, [sendRequest]);
 
     return (
         <>

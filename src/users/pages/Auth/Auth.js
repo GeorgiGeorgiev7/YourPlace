@@ -39,7 +39,8 @@ const Auth = () => {
         if (!isLoginMode) {
             setFormData({
                 ...formState.inputs,
-                username: undefined
+                username: undefined,
+                image: undefined
             }, formState.inputs.email.isValid &&
             formState.inputs.password.isValid);
         } else {
@@ -47,6 +48,10 @@ const Auth = () => {
                 ...formState.inputs,
                 username: {
                     value: '',
+                    isValid: false
+                },
+                image: {
+                    value: null,
                     isValid: false
                 }
             }, false);
@@ -72,7 +77,7 @@ const Auth = () => {
                     })
 
                 );
-                
+
                 login(data.user.id);
             } catch (err) {
                 // no login()
@@ -120,7 +125,7 @@ const Auth = () => {
                         />
                     }
                     {!isLoginMode &&
-                        <ImageUpload center id="image" />
+                        <ImageUpload center id="image" onInput={inputHandler} />
                     }
                     <Input
                         element="input"
