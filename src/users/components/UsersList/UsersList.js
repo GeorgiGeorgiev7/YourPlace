@@ -11,7 +11,7 @@ const UsersList = ({
         return (
             <div className='center'>
                 <Card className='center'>
-                    <h2>No users found.</h2>
+                    <h2 style={{ padding: '0 1rem' }}>No users found.</h2>
                 </Card>
             </div>
         );

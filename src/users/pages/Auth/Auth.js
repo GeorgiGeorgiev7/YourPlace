@@ -64,17 +64,17 @@ const Auth = () => {
 
         if (!isLoginMode) {
             try {
+                const formData = new FormData();
+                formData.append('username', formState.inputs.username.value);
+                formData.append('email', formState.inputs.email.value);
+                formData.append('password', formState.inputs.password.value);
+                formData.append('image', formState.inputs.image.value);
+
                 const data = await sendRequest(
                     'http://localhost:5000/api/users/signup',
                     'POST',
-                    {
-                        'Content-Type': 'application/json'
-                    },
-                    JSON.stringify({
-                        username: formState.inputs.username.value,
-                        email: formState.inputs.email.value,
-                        password: formState.inputs.password.value
-                    })
+                    {},
+                    formData
 
                 );
 
@@ -125,7 +125,12 @@ const Auth = () => {
                         />
                     }
                     {!isLoginMode &&
-                        <ImageUpload center id="image" onInput={inputHandler} />
+                        <ImageUpload
+                        center 
+                        id="image" 
+                        onInput={inputHandler} 
+                        errorText="Please provide an image."
+                        />
                     }
                     <Input
                         element="input"
