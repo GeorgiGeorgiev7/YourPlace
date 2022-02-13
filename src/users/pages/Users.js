@@ -11,7 +11,6 @@ import LoadingSpinner from "../../common/components/UIElements/LoadingSpinner/Lo
 const Users = () => {
     const [users, setUsers] = useState();
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
-    console.log(4);
 
     useEffect(() => {
         sendRequest('http://localhost:5000/api/users')

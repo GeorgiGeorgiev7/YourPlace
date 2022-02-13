@@ -15,6 +15,8 @@ import { VALIDATOR_EMAIL, VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../.
 
 import { useForm } from '../../../common/hooks/form-hook';
 
+import ImageUpload from '../../../common/components/FormElements/ImageUpload/ImageUpload';
+
 
 const Auth = () => {
     const { login } = useContext(AuthContext);
@@ -70,7 +72,7 @@ const Auth = () => {
                     })
 
                 );
-                console.log(data);
+                
                 login(data.user.id);
             } catch (err) {
                 // no login()
@@ -115,7 +117,11 @@ const Auth = () => {
                             validators={[VALIDATOR_REQUIRE()]}
                             errorMessage='Please choose a username.'
                             onInput={inputHandler}
-                        />}
+                        />
+                    }
+                    {!isLoginMode &&
+                        <ImageUpload center id="image" />
+                    }
                     <Input
                         element="input"
                         id="email"

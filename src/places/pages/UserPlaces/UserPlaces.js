@@ -24,14 +24,11 @@ const UserPlaces = () => {
     }, [sendRequest, userId]);
 
     const deletePlaceHandler = (deletedPlaceId) => {
-        console.log('deleting...');
         setPlaces(prev => {
             return prev.filter(place => place.id !== deletedPlaceId);
         });
     };
 
-    console.log('UserPlaces: ')
-    console.log(deletePlaceHandler)
 
     return (
         <>

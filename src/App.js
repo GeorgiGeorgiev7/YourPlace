@@ -20,9 +20,7 @@ function App() {
    const login = useCallback((uid) => {
       setIsLoggedIn(true);
       setUserId(uid);
-      console.log('2')
       navigate('/');
-      console.log(3);
    });
 
    const logout = useCallback((uid) => {

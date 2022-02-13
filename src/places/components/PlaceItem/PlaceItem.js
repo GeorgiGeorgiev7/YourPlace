@@ -19,8 +19,9 @@ const PlaceItem = ({
     onDelete
 }) => {
 
+    const { userId } = useContext(AuthContext);
+
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
-    const { isLoggedIn } = useContext(AuthContext);
 
     const [showMap, setShowMap] = useState(false);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -35,7 +36,7 @@ const PlaceItem = ({
 
         sendRequest(`http://localhost:5000/api/places/${place.id}`, 'DELETE')
             .then(() => onDelete(place.id))
-            .catch(err => { console.log(err.message); });
+            .catch(err => {  });
     };
 
     const showMapHandler = () =>
@@ -86,7 +87,7 @@ const PlaceItem = ({
                     </div>
                     <div className='place-item__actions'>
                         <Button inverse onClick={showMapHandler}>VIEW ON MAP</Button>
-                        {isLoggedIn &&
+                        {userId === place.creator &&
                             <>
                                 <Button to={`/places/${place.id}`}>EDIT</Button>
                                 <Button danger onClick={showConfirmModalHandler}>DELETE</Button>
