@@ -1,6 +1,7 @@
 import './Auth.css';
 
 import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import useHttpClient from '../../../common/hooks/http-hook';
 import AuthContext from '../../../common/context/auth-context';
 
@@ -19,6 +20,8 @@ import ImageUpload from '../../../common/components/FormElements/ImageUpload/Ima
 
 
 const Auth = () => {
+    const navigate = useNavigate();
+
     const { login } = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -75,12 +78,11 @@ const Auth = () => {
                     'POST',
                     {},
                     formData
-
                 );
-
+                
                 login(data.user.id);
             } catch (err) {
-                // no login()
+                console.error(err);
             }
 
         } else {
@@ -126,10 +128,10 @@ const Auth = () => {
                     }
                     {!isLoginMode &&
                         <ImageUpload
-                        center 
-                        id="image" 
-                        onInput={inputHandler} 
-                        errorText="Please provide an image."
+                            center
+                            id="image"
+                            onInput={inputHandler}
+                            errorText="Please provide an image."
                         />
                     }
                     <Input

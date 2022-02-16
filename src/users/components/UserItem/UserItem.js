@@ -15,9 +15,11 @@ const UserItem = ({
             <Avatar image={'http://localhost:5000/' + user.image} alt="Profile Picture" />
           </div>
           <div className='user-item__info'>
-            <h2>{user.name}</h2>
             <h3>
-              {user.username}
+              {user.places.length === 1
+                ? `${user.places.length} place`
+                : `${user.places.length} places`
+              }
             </h3>
           </div>
         </Link>
