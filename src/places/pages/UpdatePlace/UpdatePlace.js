@@ -14,7 +14,7 @@ import AuthContext from '../../../common/context/auth-context';
 
 const UpdatePlace = () => {
     const navigate = useNavigate();
-    const { userId } = useContext(AuthContext);
+    const { userId, token } = useContext(AuthContext);
     const placeId = useParams().pid;
 
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
@@ -61,7 +61,8 @@ const UpdatePlace = () => {
         sendRequest(`http://localhost:5000/api/places/${placeId}`,
             'PATCH',
             {
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             JSON.stringify({
                 title: formState.inputs.title.value,

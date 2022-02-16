@@ -14,26 +14,23 @@ import AuthContext from './common/context/auth-context';
 function App() {
    const navigate = useNavigate();
 
-   const [isLoggedIn, setIsLoggedIn] = useState(false);
+   const [token, setToken] = useState(false);
    const [userId, setUserId] = useState(null);
 
-   const login = useCallback((uid) => {
-      console.log('logged1');
-      setIsLoggedIn(true);
-      console.log('logged2');
+   const login = useCallback((uid, token) => {
+      setToken(token);
       setUserId(uid);
-      console.log('logged3');
       navigate('/');
    });
 
    const logout = useCallback((uid) => {
-      setIsLoggedIn(false);
+      setToken(null);
       setUserId(null);
       navigate('/');
    });
 
    let routes;
-   if (isLoggedIn) {
+   if (token) {
       routes = (
          <>
             <Route
@@ -82,7 +79,13 @@ function App() {
    }
 
    return (
-      <AuthContext.Provider value={{ isLoggedIn, userId, login, logout }}>
+      <AuthContext.Provider value={{
+         isLoggedIn: !!token,
+         token,
+         userId,
+         login,
+         logout
+      }}>
          <MainNav />
          <main>
             <Routes>

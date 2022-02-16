@@ -18,7 +18,7 @@ import { VALIDATOR_MINLENGTH, VALIDATOR_REQUIRE } from '../../../common/util/val
 
 const NewPlace = () => {
     const navigate = useNavigate();
-    const { userId } = useContext(AuthContext);
+    const { userId, token } = useContext(AuthContext);
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const [formState, inputHandler] = useForm({
@@ -55,7 +55,9 @@ const NewPlace = () => {
             await sendRequest(
                 'http://localhost:5000/api/places',
                 'POST',
-                {},
+                {
+                    'Authorization': token
+                },
                 formData
             );
 

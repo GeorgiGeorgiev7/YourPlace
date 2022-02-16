@@ -1,7 +1,6 @@
 import './Auth.css';
 
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
 import useHttpClient from '../../../common/hooks/http-hook';
 import AuthContext from '../../../common/context/auth-context';
 
@@ -20,8 +19,6 @@ import ImageUpload from '../../../common/components/FormElements/ImageUpload/Ima
 
 
 const Auth = () => {
-    const navigate = useNavigate();
-
     const { login } = useContext(AuthContext);
     const [isLoginMode, setIsLoginMode] = useState(true);
 
@@ -79,8 +76,8 @@ const Auth = () => {
                     {},
                     formData
                 );
-                
-                login(data.user.id);
+
+                login(data.user.id, data.token);
             } catch (err) {
                 console.error(err);
             }
@@ -99,7 +96,7 @@ const Auth = () => {
                     })
 
                 );
-                login(data.user.id);
+                login(data.user.id, data.token);
             } catch (err) {
                 // no signup()
             }
