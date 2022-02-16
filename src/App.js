@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 
 import Users from './users/pages/Users';
@@ -18,62 +18,54 @@ function App() {
    const [userId, setUserId] = useState(null);
 
    const login = useCallback((uid, token) => {
-      setToken(token);
       setUserId(uid);
-      navigate('/');
-   });
+      setToken(token);
 
-   const logout = useCallback((uid) => {
+      localStorage.setItem('userData', JSON.stringify({
+         userId: uid, token
+      }));
+
+      navigate('/');
+
+   }, []);
+
+   const logout = useCallback(() => {
       setToken(null);
       setUserId(null);
+
+      localStorage.removeItem('userData');
+
       navigate('/');
-   });
+
+   }, []);
+
+   useEffect(() => {
+      const userData = JSON.parse(localStorage.getItem('userData'));
+
+      if (userData && userData.token) {
+         login(userData.userId, userData.token);
+      }
+
+   }, [login]);
 
    let routes;
    if (token) {
       routes = (
          <>
-            <Route
-               path="/"
-               element={<Users />}
-            />
-            <Route
-               path="/:uid/places"
-               element={<UserPlaces />}
-            />
-            <Route
-               path="/places/new"
-               element={<NewPlace />}
-            />
-            <Route
-               path="/places/:pid"
-               element={<UpdatePlace />}
-            />
-            <Route
-               path="/*"
-               element={<PageNotFound />}
-            />
+            <Route path="/" element={<Users />} />
+            <Route path="/:uid/places" element={<UserPlaces />} />
+            <Route path="/places/new" element={<NewPlace />} />
+            <Route path="/places/:pid" element={<UpdatePlace />} />
+            <Route path="/*" element={<PageNotFound />} />
          </>
       );
    } else {
       routes = (
          <>
-            <Route
-               path="/"
-               element={<Users />}
-            />
-            <Route
-               path="/:uid/places"
-               element={<UserPlaces />}
-            />
-            <Route
-               path="/auth"
-               element={<Auth />}
-            />
-            <Route
-               path="/*"
-               element={<PageNotFound />}
-            />
+            <Route path="/" element={<Users />} />
+            <Route path="/:uid/places" element={<UserPlaces />} />
+            <Route path="/auth" element={<Auth />} />
+            <Route path="/*" element={<PageNotFound />} />
          </>
       );
    }
@@ -81,10 +73,8 @@ function App() {
    return (
       <AuthContext.Provider value={{
          isLoggedIn: !!token,
-         token,
-         userId,
-         login,
-         logout
+         token,  userId,
+         login, logout
       }}>
          <MainNav />
          <main>

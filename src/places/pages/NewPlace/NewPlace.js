@@ -22,22 +22,10 @@ const NewPlace = () => {
     const { isLoading, error, sendRequest, clearError } = useHttpClient();
 
     const [formState, inputHandler] = useForm({
-        title: {
-            value: '',
-            isValid: false
-        },
-        description: {
-            value: '',
-            isValid: false
-        },
-        address: {
-            value: '',
-            isValid: false
-        },
-        image: {
-            value: null,
-            isValid: false
-        }
+        title: { value: '', isValid: false },
+        description: { value: '', isValid: false },
+        address: { value: '', isValid: false },
+        image: { value: null, isValid: false }
     }, false);
 
     const submitHandler = async e => {
@@ -55,16 +43,12 @@ const NewPlace = () => {
             await sendRequest(
                 'http://localhost:5000/api/places',
                 'POST',
-                {
-                    'Authorization': token
-                },
+                { 'Authorization': token },
                 formData
             );
 
             navigate('/');
-        } catch (err) {
-
-        }
+        } catch (err) { }
     };
 
     return (
