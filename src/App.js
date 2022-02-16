@@ -1,5 +1,5 @@
-import { useState, useCallback, useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
+import useAuth from './common/hooks/auth-hook';
 
 import Users from './users/pages/Users';
 import Auth from './users/pages/Auth/Auth';
@@ -11,42 +11,9 @@ import PageNotFound from './common/pages/PageNotFound/PageNotFound';
 import AuthContext from './common/context/auth-context';
 
 
+
 function App() {
-   const navigate = useNavigate();
-
-   const [token, setToken] = useState(false);
-   const [userId, setUserId] = useState(null);
-
-   const login = useCallback((uid, token) => {
-      setUserId(uid);
-      setToken(token);
-
-      localStorage.setItem('userData', JSON.stringify({
-         userId: uid, token
-      }));
-
-      navigate('/');
-
-   }, []);
-
-   const logout = useCallback(() => {
-      setToken(null);
-      setUserId(null);
-
-      localStorage.removeItem('userData');
-
-      navigate('/');
-
-   }, []);
-
-   useEffect(() => {
-      const userData = JSON.parse(localStorage.getItem('userData'));
-
-      if (userData && userData.token) {
-         login(userData.userId, userData.token);
-      }
-
-   }, [login]);
+   const { userId, token, login, logout } = useAuth();
 
    let routes;
    if (token) {
@@ -73,7 +40,7 @@ function App() {
    return (
       <AuthContext.Provider value={{
          isLoggedIn: !!token,
-         token,  userId,
+         userId, token,
          login, logout
       }}>
          <MainNav />
