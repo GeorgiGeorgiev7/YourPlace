@@ -35,7 +35,7 @@ const PlaceItem = ({
         closeConfirmModalHandler();
 
         sendRequest(
-            `http://localhost:5000/api/places/${place.id}`,
+            `${process.env.REACT_APP_BACKEND_HOST_URL}/api/places/${place.id}`,
             'DELETE',
             {
                 'Authorization': token
@@ -84,7 +84,7 @@ const PlaceItem = ({
                 <Card className='place-item__content'>
                     {isLoading && <LoadingSpinner asOverlay />}
                     <div className='place-item__image'>
-                        <img src={`http://localhost:5000/${place.image}`} alt={place.title} />
+                        <img src={`${process.env.REACT_APP_BACKEND_HOST_URL}/${place.image}`} alt={place.title} />
                     </div>
                     <div className='place-item__info'>
                         <h2>{place.title}</h2>

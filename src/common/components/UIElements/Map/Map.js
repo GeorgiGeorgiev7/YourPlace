@@ -16,7 +16,7 @@ const Map = (props) => {
             position: props.center,
             map
         });
-    }, []);
+    }, [props]);
 
 
     return (

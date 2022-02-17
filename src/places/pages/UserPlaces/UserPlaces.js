@@ -17,7 +17,7 @@ const UserPlaces = () => {
 
     useEffect(() => {
         sendRequest(
-            `http://localhost:5000/api/places/user/${userId}`
+            `${process.env.REACT_APP_BACKEND_HOST_URL}/api/places/user/${userId}`
         )
             .then(data => setPlaces(data.places))
             .catch(err => { });

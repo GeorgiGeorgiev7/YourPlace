@@ -12,7 +12,7 @@ const UserItem = ({
       <Card className='user-item__content'>
         <Link to={`/${user.id}/places`}>
           <div className='user-item__image'>
-            <Avatar image={'http://localhost:5000/' + user.image} alt="Profile Picture" />
+            <Avatar image={process.env.REACT_APP_BACKEND_HOST_URL + '/' + user.image} alt="Profile Picture" />
           </div>
           <div className='user-item__info'>
             <h3>

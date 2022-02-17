@@ -33,7 +33,7 @@ const UpdatePlace = () => {
     }, false);
 
     useEffect(() => {
-        sendRequest(`http://localhost:5000/api/places/${placeId}`)
+        sendRequest(`${process.env.REACT_APP_BACKEND_HOST_URL}/api/places/${placeId}`)
             .then(data => {
                 const place = data.place;
 
@@ -58,7 +58,7 @@ const UpdatePlace = () => {
     const submitHandler = e => {
         e.preventDefault();
 
-        sendRequest(`http://localhost:5000/api/places/${placeId}`,
+        sendRequest(`${process.env.REACT_APP_BACKEND_HOST_URL}/api/places/${placeId}`,
             'PATCH',
             {
                 'Content-Type': 'application/json',

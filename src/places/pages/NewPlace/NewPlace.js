@@ -41,7 +41,7 @@ const NewPlace = () => {
             formData.append('image', formState.inputs.image.value);
 
             await sendRequest(
-                'http://localhost:5000/api/places',
+                `${process.env.REACT_APP_BACKEND_HOST_URL}/api/places`,
                 'POST',
                 { 'Authorization': token },
                 formData

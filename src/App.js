@@ -1,15 +1,20 @@
+import React, { Suspense } from 'react';
+
 import { Routes, Route } from 'react-router-dom';
 import useAuth from './common/hooks/auth-hook';
 
-import Users from './users/pages/Users';
-import Auth from './users/pages/Auth/Auth';
 import MainNav from './common/components/Navigation/MainNav/MainNav';
-import NewPlace from './places/pages/NewPlace/NewPlace';
-import UpdatePlace from './places/pages/UpdatePlace/UpdatePlace';
-import UserPlaces from './places/pages/UserPlaces/UserPlaces';
 import PageNotFound from './common/pages/PageNotFound/PageNotFound';
-import AuthContext from './common/context/auth-context';
 
+import AuthContext from './common/context/auth-context';
+import LoadingSpinner from './common/components/UIElements/LoadingSpinner/LoadingSpinner';
+
+
+const Users = React.lazy(() => import('./users/pages/Users'));
+const Auth = React.lazy(() => import('./users/pages/Auth/Auth'));
+const UserPlaces = React.lazy(() => import('./places/pages/UserPlaces/UserPlaces'));
+const NewPlace = React.lazy(() => import('./places/pages/NewPlace/NewPlace'));
+const UpdatePlace = React.lazy(() => import('./places/pages/UpdatePlace/UpdatePlace'));
 
 
 function App() {
@@ -45,9 +50,15 @@ function App() {
       }}>
          <MainNav />
          <main>
-            <Routes>
-               {routes}
-            </Routes>
+            <Suspense fallback={
+               <div className='center'>
+                  <LoadingSpinner />
+               </div>
+            }>
+               <Routes>
+                  {routes}
+               </Routes>
+            </Suspense>
          </main>
       </AuthContext.Provider>
    );
